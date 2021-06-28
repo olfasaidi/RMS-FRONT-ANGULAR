@@ -1,0 +1,99 @@
+@import "src/@fuse/scss/fuse";
+@import '~@angular/material/theming';
+
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+   
+  .spinner:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    border-top-color: #000000;
+    animation: spinner .8s linear infinite;
+  }
+
+// ::ng-deep .mat-horizontal-stepper-header{
+//   pointer-events: none !important;
+// }
+
+.logo{
+    padding: 10px;
+}
+
+.nav-buttons{
+    .mat-flat-button{
+        margin: 10px;
+    }
+}
+
+.add-user{
+    @include media-breakpoint('sm') {
+        text-align: center;
+    }
+    @include media-breakpoint('xs') {
+        text-align: center;
+    }
+    .add-user-button{
+        margin: 4px 10px;
+        height: 59px;
+        width: 100%;
+    }
+}
+
+.card {
+    margin: 10px;
+    width: 100%;
+    .mat-card:hover{
+        @include mat-elevation(8);
+    }
+    .mat-card{
+        cursor: default;
+        width: 100%;
+        height: 400px;
+        @include mat-elevation-transition;
+        @include mat-elevation(2);
+        mat-card-content{
+            form{
+                mat-form-field{
+                    width: 100%;
+                }
+                .text-center{
+                    text-align: center;
+                    .submit-button {
+                        width: 220px;
+                        margin: 16px auto;
+                        display: block;
+    
+                        @include media-breakpoint('xs') {
+                            width: 90%;
+                        }
+                    }
+                }
+            }
+            .text-center{
+                
+                text-align: center;
+                .next-button {
+                    width: 220px;
+                    margin: 16px auto;
+                    display: block;
+
+                    @include media-breakpoint('xs') {
+                        width: 90%;
+                    }
+                }
+            }
+            
+        }
+    }
+}

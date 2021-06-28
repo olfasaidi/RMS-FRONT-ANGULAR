@@ -1,0 +1,974 @@
+<div class="app" class="page-layout carded fullwidth inner-scroll">
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg primary"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- CONTENT HEADER -->
+        <div
+            class="header primary p-24"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+        >
+            <h2 class="m-0">Registration Form (Does not work !)</h2>
+        </div>
+        <!-- / CONTENT HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <!-- CONTENT TOOLBAR -->
+            <!-- <div class="toolbar px-24 py-8">
+                <span>Content toolbar</span>
+            </div> -->
+            <!-- / CONTENT TOOLBAR -->
+
+            <!-- CONTENT -->
+            <div class="content p-24" fusePerfectScrollbar>
+                <mat-horizontal-stepper
+                    linear="false"
+                    (selectionChange)="stepChanged($event, stepper)"
+                    #stepper
+                >
+                    <mat-step editable="true">
+                        <div class="logo" fxLayout="row" fxLayoutAlign="center">
+                            <!--<img class="" src="images/1/logoRMS.png" width="150" height="80">-->
+                            <img
+                                src="assets/images/logos/rms.png"
+                                height="120"
+                                width="120"
+                            />
+                        </div>
+                        <div
+                            fxLayout="row"
+                            fxLayout.lt-md="column"
+                            fxLayoutAlign="center"
+                        >
+                            <div class="card">
+                                <mat-card class="mat-card">
+                                    <mat-card-header>
+                                        <mat-card-title
+                                            >I'm already an RMS
+                                            customer</mat-card-title
+                                        >
+                                    </mat-card-header>
+
+                                    <mat-card-content class="line-height-1.75">
+                                        <form
+                                            [formGroup]="loginForm"
+                                            (ngSubmit)="login()"
+                                        >
+                                            <mat-form-field
+                                                appearance="outline"
+                                            >
+                                                <mat-label>Email</mat-label>
+                                                <input
+                                                    matInput
+                                                    formControlName="email"
+                                                />
+                                                <mat-icon
+                                                    matSuffix
+                                                    class="secondary-text"
+                                                    >account_circle</mat-icon
+                                                >
+                                                <mat-error>
+                                                    Email is required
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field
+                                                appearance="outline"
+                                            >
+                                                <mat-label>Password</mat-label>
+                                                <input
+                                                    matInput
+                                                    type="password"
+                                                    formControlName="motpass"
+                                                />
+                                                <mat-icon
+                                                    matSuffix
+                                                    class="secondary-text"
+                                                    >lock</mat-icon
+                                                >
+                                                <mat-error>
+                                                    Password is required
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field appearance="outline">
+                                                <mat-select
+                                                    formControlName="role"
+                                                    required
+                                                >
+                                                <mat-option
+                                                        value="ROLE_SUPERADMIN"
+                                                        selected
+                                                    >Super Admin
+                                                    </mat-option>
+                                                    <mat-option
+                                                        value="ROLE_ADMIN"
+                                                        selected
+                                                    >Admin
+                                                    </mat-option>
+                                                    <mat-option
+                                                        value="ROLE_VIEWER"
+                                                        selected
+                                                    >Viewer
+                                                    </mat-option>
+                                                    <mat-option
+                                                        value="ROLE_MANAGER"
+                                                        selected
+                                                    >Manager
+                                                    </mat-option>
+                                                    <mat-option
+                                                        value="ROLE_EDITOR"
+                                                        selected
+                                                    >Editor
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+
+                                            <!--<input type="submit" value="Login">-->
+                                            <div class="text-center">
+                                                <button
+                                                    mat-flat-button
+                                                    class="submit-button"
+                                                    type="submit"
+                                                    color="accent"
+                                                    [disabled]="isLoading"
+                                                    [class.spinner]="isLoading"
+                                                >
+                                                    <span>LOGIN</span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                            <div class="card">
+                                <mat-card class="mat-card">
+                                    <mat-card-header>
+                                        <mat-card-title
+                                            >I'm new to RMS</mat-card-title
+                                        >
+                                        <mat-card-subtitle
+                                            >Create an RMS account for
+                                            :</mat-card-subtitle
+                                        >
+                                    </mat-card-header>
+
+                                    <mat-card-content class="line-height-1.75">
+                                        <mat-list role="list">
+                                            <mat-list-item>
+                                                <mat-icon matListIcon
+                                                    >arrow_right_alt</mat-icon
+                                                >
+                                                <h3 matLine>
+                                                    Manage your services
+                                                </h3>
+                                            </mat-list-item>
+                                            <mat-list-item>
+                                                <mat-icon matListIcon
+                                                    >arrow_right_alt</mat-icon
+                                                >
+                                                <h3 matLine>
+                                                    Manage your orders in
+                                                    progress
+                                                </h3>
+                                            </mat-list-item>
+                                            <mat-list-item>
+                                                <mat-icon matListIcon
+                                                    >arrow_right_alt</mat-icon
+                                                >
+                                                <h3 matLine>
+                                                    Manage your bills and
+                                                    payment methods
+                                                </h3>
+                                            </mat-list-item>
+                                        </mat-list>
+                                        <div class="text-center">
+                                            <button
+                                                mat-flat-button
+                                                type="button"
+                                                color="accent"
+                                                class="next-button"
+                                                matStepperNext
+                                            >
+                                                ADD COMPANY
+                                            </button>
+                                        </div>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-step>
+
+                    <mat-step editable="true">
+                        <h1 class="text-center mt-5 text-bold text-black">
+                            Number Of Users
+                        </h1>
+                        <div fxLayout="row" fxLayout.lt-md="column">
+                            <div style="width: 100%;" fxLayout="column">
+                                <h2>choose your number of users:</h2>
+                            </div>
+                            <div style="width: 100%;" fxLayout="column">
+                                <mat-form-field appearance="outline">
+                                    <mat-select
+                                        [formControl]="nbOfUsers"
+                                        required
+                                    >
+                                        <mat-option [value]="6" selected>
+                                            6 Users - 20 DT
+                                        </mat-option>
+                                        <mat-option [value]="15" selected>
+                                            15 Users - 40 DT
+                                        </mat-option>
+                                        <mat-option [value]="50" selected>
+                                            50 Users - 65 DT
+                                        </mat-option>
+                                        <mat-option [value]="0" selected>
+                                            Unlimited Users - 80 DT
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div
+                            class="nav-buttons"
+                            style="float: right; margin: 10px;"
+                        >
+                            <button
+                                mat-flat-button
+                                type="button"
+                                color="accent"
+                                class="mx-2"
+                                matStepperPrevious
+                            >
+                                Previous
+                            </button>
+                            <button
+                                mat-flat-button
+                                type="button"
+                                color="accent"
+                                class="mx-2"
+                                matStepperNext
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step editable="true">
+                        <h1 class="text-center text-bold text-black">
+                            Users
+                        </h1>
+                        <div
+                            *ngIf="quotaExceeded"
+                            class="alert alert-danger"
+                            role="alert"
+                        >
+                            Number of users has exceeded the quota.
+                        </div>
+                        <form
+                            [formGroup]="addUserForm"
+                            class="form-inline"
+                            #formDirective="ngForm"
+                            (ngSubmit)="addUser(formDirective)"
+                        >
+                            <div
+                                fxLayout="row"
+                                fxLayout.lt-md="column"
+                                fxLayoutGap="10px"
+                            >
+                                <mat-form-field
+                                    fxFlex="25"
+                                    appearance="outline"
+                                >
+                                    <mat-label>Name</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="name"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    fxFlex="25"
+                                    appearance="outline"
+                                >
+                                    <mat-label>Email</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="email"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <div fxFlex="50">
+                                    <mat-form-field
+                                        fxFlex="50"
+                                        appearance="outline"
+                                    >
+                                        <mat-label>Role</mat-label>
+                                        <mat-select
+                                            formControlName="role"
+                                            required
+                                        >
+                                            <mat-option value="admins" selected>
+                                                Admin
+                                            </mat-option>
+                                            <mat-option value="managers">
+                                                Manager
+                                            </mat-option>
+                                            <mat-option value="editors">
+                                                Editor
+                                            </mat-option>
+                                            <mat-option value="viewers">
+                                                Viewer
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div fxFlex="50" class="add-user">
+                                        <button
+                                            class="add-user-button"
+                                            mat-flat-button
+                                            type="submit"
+                                            color="primary"
+                                        >
+                                            <mat-icon>add</mat-icon> ADD
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- <button
+                                style="height: 63px;"
+                                    fxFlex="25"
+                                    mat-flat-button
+                                    color="primary"
+                                    type="submit"
+                                >
+                                    ADD
+                                </button> -->
+                            </div>
+                        </form>
+                        <mat-list>
+                            <div mat-subheader>Admins</div>
+                            <mat-list-item *ngFor="let u of admins">
+                                <mat-icon mat-list-icon>how_to_reg</mat-icon>
+                                <div mat-line>{{ u.name }}</div>
+                                <div mat-line>{{ u.email }}</div>
+                                <button
+                                    mat-icon-button
+                                    color="warn"
+                                    (click)="removeUser(u)"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <div mat-subheader>Managers</div>
+                            <mat-list-item *ngFor="let u of managers">
+                                <mat-icon mat-list-icon>person</mat-icon>
+                                <div mat-line>{{ u.name }}</div>
+                                <div mat-line>{{ u.email }}</div>
+                                <button
+                                    mat-icon-button
+                                    color="warn"
+                                    (click)="removeUser(u)"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <div mat-subheader>Editors</div>
+                            <mat-list-item *ngFor="let u of editors">
+                                <mat-icon mat-list-icon>edit</mat-icon>
+                                <div mat-line>{{ u.name }}</div>
+                                <div mat-line>{{ u.email }}</div>
+                                <button
+                                    mat-icon-button
+                                    color="warn"
+                                    (click)="removeUser(u)"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <div mat-subheader>Viewers</div>
+                            <mat-list-item *ngFor="let u of viewers">
+                                <mat-icon mat-list-icon>visibility</mat-icon>
+                                <div mat-line>{{ u.name }}</div>
+                                <div mat-line>{{ u.email }}</div>
+                                <button
+                                    mat-icon-button
+                                    color="warn"
+                                    (click)="removeUser(u)"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        </mat-list>
+                        <div
+                            class="nav-buttons"
+                            style="float: right; margin: 10px;"
+                        >
+                            <button
+                                mat-flat-button
+                                type="button"
+                                color="accent"
+                                class="mx-2"
+                                matStepperPrevious
+                            >
+                                Previous
+                            </button>
+                            <button
+                                mat-flat-button
+                                type="button"
+                                color="accent"
+                                class="mx-2"
+                                matStepperNext
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step editable="true" [stepControl]="technicalInfo">
+                        <h1 class="text-center text-bold text-black">
+                            Recommendation
+                        </h1>
+                        <form [formGroup]="technicalInfo">
+                            <p class="text-center lead">
+                                Select your RMS offer associated with your need
+                            </p>
+
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <img
+                                            src="../../assets/best.png"
+                                            style="width: 75px;"
+                                            class=""
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-6 text-center pl-5"
+                                    style="margin-left: auto;"
+                                >
+                                    <p>135 din HT / mois</p>
+                                    <p>soit 160.65 din TTC / mois</p>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <div fxLayout="row" fxLayout.lt-md="column">
+                                <h3 fxFlex="30">
+                                    Choose your subscribe period
+                                </h3>
+
+                                <mat-form-field fxFlex="70">
+                                    <mat-select
+                                        formControlName="period_subscription"
+                                        required
+                                    >
+                                        <mat-option value="12" selected>
+                                            12 Months
+                                        </mat-option>
+                                        <mat-option value="24">
+                                            24 Months
+                                        </mat-option>
+                                        <mat-option value="36">
+                                            36 Months
+                                        </mat-option>
+                                        <mat-option value="60">
+                                            60 Months
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+
+                            <div fxLayout="row" fxLayout.lt-md="column">
+                                <h3 fxFlex="30">
+                                    Choose a database associated with your need
+                                </h3>
+
+                                <mat-form-field fxFlex="70">
+                                    <mat-select
+                                        formControlName="databasesize"
+                                        required
+                                    >
+                                        <mat-option value="20" selected>
+                                            10 GB Space - 20 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="50">
+                                            50 GB Space - 50 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="120">
+                                            100 GB Space - 120 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="210">
+                                            250 GB Space - 210 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="470">
+                                            500 GB Space - 470 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="800">
+                                            1 TB Space - 800 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="1600">
+                                            2 TB Space - 1600 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="3000">
+                                            5 TB Space - 3000 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="5000">
+                                            Unlimited Space - 5000 ᴰᵀ
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayout.lt-md="column">
+                                <h3 fxFlex="30">
+                                    Choose the SLA associated with your need
+                                </h3>
+
+                                <mat-form-field fxFlex="70">
+                                    <mat-select
+                                        formControlName="slatype"
+                                        required
+                                    >
+                                        <mat-option value="15" selected>
+                                            <strong
+                                                >Three SLA Event/Metric
+                                                Types</strong
+                                            >(First Response | Update | Solved)
+                                            15 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="30">
+                                            <strong
+                                                >Additional SLA Event/Metric
+                                                Types</strong
+                                            >(Assignment | Workaround | Custom)
+                                            30 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="40">
+                                            <strong
+                                                >Multiple SLA Event Types &
+                                                Advanced SLA Workflow
+                                                Models</strong
+                                            >
+                                            40 ᴰᵀ
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayout.lt-md="column">
+                                <h3 fxFlex="30">
+                                    Choose the support associated with your need
+                                </h3>
+
+                                <mat-form-field fxFlex="70">
+                                    <mat-select
+                                        formControlName="supporttype"
+                                        required
+                                    >
+                                        <mat-option value="0">
+                                            No support
+                                        </mat-option>
+                                        <mat-option value="support1" selected>
+                                            1 day support / month - 20 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support5">
+                                            5 day support / month - 65 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support10">
+                                            10 day support / month - 150 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support">
+                                            Unlimited hour of support - 180 ᴰᵀ
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div
+                                style="padding-left: 40px; padding-right: 40px;"
+                            >
+                                <br />
+                                <div
+                                    style="
+                                        color: black;
+                                        margin-left: 20px;
+                                        margin-right: 20px;
+                                        text-align: left;
+                                    "
+                                >
+                                    <div class="row">
+                                        <h4 class="col-md-2 text-bold">
+                                            Support & SLA
+                                        </h4>
+                                        <h6
+                                            class="col-md-2"
+                                            style="
+                                                color: red;
+                                                padding-top: 5px;
+                                            "
+                                        >
+                                            "Free offer"
+                                        </h6>
+                                    </div>
+                                    <br />
+                                    <ul>
+                                        <li class="pull-left">
+                                            Multiple SLA Plan's,and Assistant
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            Pre-warming & Beach Notification's
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            Business Hours Measurement
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            We provide technical support all RMS
+                                            services released to General
+                                            Availability, including Backup,
+                                            <br />
+                                            through RMS Support, starting at
+                                            0.0dt/month. Biling and subscription
+                                            management support is provided at no
+                                            cost.
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            We guarantee at least 99.9%
+                                            availability of the backup and
+                                            restore functionality of the RMS
+                                            Backup service.
+                                        </li>
+                                        <br />
+                                        <br />
+                                        <li class="pull-left">
+                                            Availability is calculated over a
+                                            yearly billing cycle.
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            RMS Backup uses Block Blob storage
+                                            for backing up your instances
+                                        </li>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <div class="row">
+                                            <h4 class="col-md-2 text-bold">
+                                                Other Options
+                                            </h4>
+                                            <h6
+                                                class="col-md-2"
+                                                style="
+                                                    color: red;
+                                                    padding-top: 5px;
+                                                "
+                                            >
+                                                "Free offer"
+                                            </h6>
+                                        </div>
+                                        <br />
+                                        <li class="pull-left">
+                                            Ultimited trafic
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">Free domain</li>
+                                        <br />
+                                        <li class="pull-left">
+                                            SSH Access (Certifica SSL EV)
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            Free acces to documentation
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            Free acces to user manuel
+                                        </li>
+                                        <br />
+                                        <li class="pull-left">
+                                            Free acces to forum
+                                        </li>
+                                        <br />
+                                    </ul>
+                                </div>
+
+                                <br />
+                            </div>
+
+                            <div
+                                class="nav-buttons"
+                                style="float: right; margin: 10px;"
+                            >
+                                <button
+                                    mat-flat-button
+                                    type="button"
+                                    color="accent"
+                                    class="mx-2"
+                                    matStepperPrevious
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    mat-flat-button
+                                    type="button"
+                                    color="accent"
+                                    class="mx-2"
+                                    matStepperNext
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step editable="false" [stepControl]="personalInfo">
+                        <h1 style="color: black;" class="fs-title text-center">
+                            <b>Personal Information</b>
+                        </h1>
+                        <form [formGroup]="personalInfo">
+                            <mat-form-field
+                                style="width: 100%;"
+                                *ngFor="let c of formControlArr"
+                                appearance="outline"
+                            >
+                                <mat-label *ngIf="c != 'confpass'">{{
+                                    c
+                                }}</mat-label>
+                                <mat-label *ngIf="c === 'confpass'"
+                                    >confirm</mat-label
+                                >
+                                <input
+                                    *ngIf="c != 'motpass' && c != 'confpass'"
+                                    matInput
+                                    [formControlName]="c"
+                                    required
+                                />
+                                <input
+                                    matInput
+                                    *ngIf="c === 'motpass' || c === 'confpass'"
+                                    type="password"
+                                    [formControlName]="c"
+                                    required
+                                />
+                                <mat-error>{{ c }} is required</mat-error>
+                            </mat-form-field>
+                        </form>
+                        <div
+                            *ngIf="errorMsg"
+                            class="alert alert-danger"
+                            role="alert"
+                        >
+                            {{ errorMsg }}
+                            <button
+                                type="button"
+                                class="close"
+                                (click)="dismissAlert()"
+                            >
+                                <span class="material-icons">
+                                    close
+                                </span>
+                            </button>
+                        </div>
+                        <div
+                            class="nav-buttons"
+                            style="float: right; margin: 10px;"
+                        >
+                            <button
+                                mat-flat-button
+                                type="button"
+                                color="accent"
+                                class="mx-2"
+                                matStepperPrevious
+                            >
+                                Previous
+                            </button>
+                            <button
+                                mat-flat-button
+                                color="accent"
+                                class="mx-2"
+                                (click)="submitAll(stepper)"
+                                [disabled]="isLoading || !personalInfo.valid"
+                                [class.spinner]="isLoading"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step editable="false">
+                        <h3 class="text-center">Contracts</h3>
+                        <h4 class="text-center">Validation of contracts</h4>
+
+                        <div
+                            class="rounded text-center"
+                            style="
+                                background-color: #eee;
+                                border: 1px solid #ddd;
+                                border-radius: 8px;
+                            "
+                        >
+                            <div
+                                class="form-group text-center"
+                                style="width: 99%;"
+                            >
+                                <label
+                                    class="col-sm-12 control-label"
+                                    style="text-align: left;"
+                                >
+                                    <span
+                                        class="glyphicon glyphicon-arrow-down pull-left"
+                                    ></span
+                                    >contract_partDomain</label
+                                >
+                                <div class="col-sm-12">
+                                    <textarea
+                                        rows="13"
+                                        cols="100"
+                                        class="form-control"
+                                        onscroll="this"
+                                        readonly
+                                        style="
+                                            background: white;
+                                            text-align: left;
+                                            resize: none;
+                                        "
+                                    >
+                                OVH CONDITIONS PARTICULIERES D'ENREGISTREMENT,DE RENOUVELLEMENT ET DE TRANSFERT DE NOMS DE DOMAINE Mis à jour en date du
+                                21 Juin 2010 Définitions: Unité d'Enregistrement (Registrar):Entité agréée par l'ICANN, constituant un intermédiaire
+                                technique au travers duquel les demandes d'enregistrement de Noms de Domaine peuvent être soumises au Registre,
+                                OVH, ayant reçu l'agrément de l'ICANN, est en mesure de proposer les présentes prestations. ICANN (Internet Corporation
+                                for Assigned Names and Numbers) http://www.icann.org : Organisme tiers au présent contrat, définissant notamment
+                                les règles d'attribution et de gestion des Noms... http://www.icann.org : Organisme tiers au présent contrat,
+                                définissant notamment les règles d'attribution et de gestion des Noms... http://www.icann.org : Organisme tiers
+                                au présent contrat, définissant notamment les règles d'attribution et de gestion des Noms... Définitions: Unité
+                                d'Enregistrement (Registrar):Entité agréée par l'ICANN, constituant un intermédiaire technique au travers duquel
+                                les demandes d'enregistrement de Noms de Domaine peuvent être soumises au Registre, OVH, ayant reçu l'agrément
+                                de l'ICANN, est en mesure de proposer les présentes prestations. ICANN (Internet Corporation for Assigned Names
+                                and Numbers) http://www.icann.org : Organisme tiers au présent contrat, définissant notamment les règles d'attribution
+                                et de gestion des Noms... http://www.icann.org : Organisme tiers au présent contrat, définissant notamment les
+                                règles d'attribution et de gestion des Noms... http://www.icann.org : Organisme tiers au présent contrat, définissant
+                                notamment les règles d'attribution et de gestion des Noms...
+                              </textarea
+                                    >
+                                </div>
+                                <a
+                                    href="contracts/contract_partDomain.pdf"
+                                    style="float: left;"
+                                    target="_blank"
+                                    >&nbsp;&nbsp;
+                                    <img
+                                        src="../../assets/export-pdf.png"
+                                        style="width: 18px; height: 18px;"
+                                    />Ouvrir le contrat "contrat_partDomain" au
+                                    format PDF</a
+                                >
+                            </div>
+
+                            <div class="form-group" style="width: 99%;">
+                                <label
+                                    class="col-sm-12 control-label"
+                                    style="text-align: left;"
+                                >
+                                    <span
+                                        class="glyphicon glyphicon-arrow-down pull-left"
+                                    ></span
+                                    >Conditions générales de service</label
+                                >
+                                <div class="col-sm-12">
+                                    <textarea
+                                        rows="13"
+                                        cols="100"
+                                        class="form-control"
+                                        onscroll="this"
+                                        readonly
+                                        style="
+                                            background: white;
+                                            text-align: left;
+                                            resize: none;
+                                        "
+                                    >
+                                CONDITIONS GENERALES DE SERVICE Dernière version en date du 17/11/2017 Les présentes sont conclues entre : La société OVH,
+                                SARL, société au capital de 10000 DT MF : 1111538F/A/M/000 RC : B24122392009 Rue 8300, Résidence TALAL, Appartement
+                                B 3-2, Montplaisir CP 1082, Tunis, représentée par M.KLABA, ci-dessous nommée OVH, et entre toute personne physique
+                                ou morale, particulier ou professionnel, de droit privé ou de droit public souhaitant s'engager dans une ou plusieurs
+                                des prestations fournies par la société OVH, ci-après nommée le Client. DEFINITIONS : DEFINITIONS : DEFINITIONS
+                                : DEFINITIONS : DEFINITIONS : DEFINITIONS : DEFINITIONS : DEFINITIONS : DEFINITIONS : DEFINITIONS :
+                              </textarea
+                                    >
+                                </div>
+                                <a
+                                    href="contracts/Conditions_générales_de_service.pdf"
+                                    style="float: left;"
+                                    target="_blank"
+                                    >&nbsp;&nbsp;
+                                    <img
+                                        src="../../assets/export-pdf.png"
+                                        style="width: 18px; height: 18px;"
+                                    />Ouvrir le contrat "Condition générales de
+                                    service" au format PDF</a
+                                >
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <h5>Acceptance of contracts</h5>
+
+                        <br />
+
+                        <div class="checkbox" style="float: left;">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    id="field_terms"
+                                    required
+                                    name="terms"
+                                    [formControl]="acceptTerms"
+                                />I have read the contracts and I accept them
+                            </label>
+                        </div>
+                        <!--<p><input type="submit"></p>-->
+                        <br />
+                        <br />
+                        <br />
+                        <hr style="border-bottom: 1px dotted lightgray;" />
+                        <br />
+                        <div class="mt-5" style="float: right;">
+                            <button
+                                mat-flat-button
+                                color="primary"
+                                class="mx-2"
+                                (click)="finish()"
+                                [disabled]="acceptTerms.invalid"
+                            >
+                                Finish
+                            </button>
+                        </div>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

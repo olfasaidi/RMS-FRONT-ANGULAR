@@ -1,0 +1,225 @@
+<div id="list" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    shopping_basket
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    {{modelName}} list
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input #filter placeholder="Search for an item">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <!-- ADD BUTTON -->
+            <button mat-raised-button
+                    *ngIf="permissions.add"
+                    [routerLink]="'/'+modelName.toLowerCase()+'/new'"
+                    class="add-company-button fuse-white mt-24 mt-md-0">
+                <span>ADD NEW {{modelName.toUpperCase()}}</span>
+            </button>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <mat-table class="list-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <!-- ID Column -->
+                <ng-container *ngIf="model.id" matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        <p class="text-truncate">{{item.id}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Image Column -->
+                <ng-container *ngIf="model.image" matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        <img class="item-image"
+                             *ngIf="item.featuredImageId" [alt]="item.name"
+                             [src]="item.images[item.featuredImageId].url"/>
+                        <img *ngIf="!item.featuredImageId"
+                             [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container *ngIf="model.name" matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        <p class="text-truncate">{{item.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Category Column -->
+                <ng-container *ngIf="model.category" matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="category text-truncate">
+                            {{item.category}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container *ngIf="model.description" matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Description</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="description text-truncate">
+                            {{item.description}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Sector Column -->
+                <ng-container *ngIf="model.sector" matColumnDef="sector">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Sector</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="sector text-truncate">
+                            {{item.sector}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Activity Column -->
+                <ng-container *ngIf="model.activity" matColumnDef="activity">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Activity</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="activity text-truncate">
+                            {{item.activity}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Territories Column -->
+                <ng-container *ngIf="model.territories" matColumnDef="territories">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Territories</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="territories text-truncate">
+                            {{item.territories}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Staff Column -->
+                <ng-container *ngIf="model.staffcount" matColumnDef="staffcount">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Staff Count</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-sm>
+
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':item.staffcount <= 5, 'amber-500':item.staffcount > 5 && item.staffcount <= 15,'green-600':item.staffcount > 15}">
+                        </span>
+                        <span>
+                            {{item.staffcount}}
+                        </span>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Creator Column -->
+                <ng-container *ngIf="model.creator" matColumnDef="creator">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Creator</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="creator text-truncate">
+                            {{item.creator}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Link Column -->
+                <ng-container *ngIf="model.link" matColumnDef="link">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Link</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-md>
+                        <p class="link text-truncate">
+                            {{item.link}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container *ngIf="model.price" matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-xs>
+                        <p class="price text-truncate">
+                            {{item.price | currency:'USD':'symbol'}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Quantity Column -->
+                <!-- <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-sm>
+
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':item.quantity <= 5, 'amber-500':item.quantity > 5 && item.quantity <= 25,'green-600':item.quantity > 25}">
+                        </span>
+                        <span>
+                            {{item.quantity}}
+                        </span>
+
+                    </mat-cell>
+                </ng-container> -->
+
+                <!-- Active Column -->
+                <ng-container *ngIf="model.active" matColumnDef="active">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="item.active != '0'" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="item.active === '0'" class="active-icon red-500 s-16">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let item; columns: displayedColumns;"
+                         class="item"
+                         matRipple
+                         [routerLink]="'/'+modelName.toLowerCase()+'/'+item.id">
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

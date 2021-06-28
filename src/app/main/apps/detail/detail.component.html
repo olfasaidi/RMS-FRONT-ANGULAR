@@ -1,0 +1,740 @@
+<div id="item" class="page-layout carded fullwidth inner-scroll">
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- HEADER -->
+        <div
+            class="header accent"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+        >
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button
+                    mat-icon-button
+                    class="mr-0 mr-sm-16"
+                    [routerLink]="'/' + listName"
+                >
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div
+                    class="item-image mr-8 mr-sm-16"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '50ms', scale: '0.2' }
+                    }"
+                >
+                    <img *ngIf="item.images[0]" [src]="item.images[0].url" />
+                    <img
+                        *ngIf="!item.images[0]"
+                        [src]="
+                            'assets/images/ecommerce/product-image-placeholder.png'
+                        "
+                    />
+                </div>
+
+                <div
+                    fxLayout="column"
+                    fxLayoutAlign="start start"
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', x: '-25px' }
+                    }"
+                >
+                    <div class="h2" *ngIf="pageType === 'edit'">
+                        {{ item.name }}
+                    </div>
+                    <div class="h2" *ngIf="pageType === 'new'">
+                        New {{ modelName }}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>{{ modelName }} Detail</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <div class="buttons">
+                <button
+                    mat-raised-button
+                    class="save-item-button"
+                    [disabled]="itemForm.invalid || itemForm.pristine"
+                    *ngIf="pageType === 'edit' && permissions.modify"
+                    (click)="saveItem()"
+                >
+                    <span>SAVE</span>
+                </button>
+
+                <button
+                    mat-raised-button
+                    class="save-item-button"
+                    *ngIf="pageType === 'edit' && permissions.delete"
+                    (click)="deleteItem()"
+                >
+                    <span>DELETE</span>
+                </button>
+
+                <button
+                    mat-raised-button
+                    class="save-item-button"
+                    [disabled]="itemForm.invalid"
+                    *ngIf="pageType === 'new' && permissions.add"
+                    (click)="addItem()"
+                >
+                    <span>ADD</span>
+                </button>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <!-- CONTENT -->
+            <div class="content">
+                <form
+                    name="itemForm"
+                    [formGroup]="itemForm"
+                    class="item w-100-p"
+                    fxLayout="column"
+                    fxFlex
+                >
+                    <mat-tab-group>
+                        <mat-tab label="Basic Info">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field
+                                    *ngIf="model.name"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Name</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Item Name"
+                                        name="name"
+                                        formControlName="name"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.email"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Email</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Email"
+                                        name="email"
+                                        formControlName="email"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.password && pageType === 'new'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Password</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Password"
+                                        type="password"
+                                        name="password"
+                                        formControlName="password"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.telephone"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Telephone</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Telephone"
+                                        name="telephone"
+                                        formControlName="telephone"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.description"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Item Description</mat-label>
+                                    <textarea
+                                        matInput
+                                        placeholder="Item Description"
+                                        name="description"
+                                        formControlName="description"
+                                        rows="5"
+                                        required
+                                    >
+                                    </textarea>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.category"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Categories</mat-label>
+
+                                    <mat-chip-list
+                                        #categoryList
+                                        name="categories"
+                                        formControlName="categories"
+                                    >
+                                        <mat-chip
+                                            *ngFor="
+                                                let category of item.categories
+                                            "
+                                            [removable]="true"
+                                            (removed)="
+                                                item.removeCategory(category)
+                                            "
+                                        >
+                                            {{ category }}
+                                            <mat-icon matChipRemove
+                                                >cancel</mat-icon
+                                            >
+                                        </mat-chip>
+
+                                        <input
+                                            [matChipInputFor]="categoryList"
+                                            [matChipInputAddOnBlur]="true"
+                                            (matChipInputTokenEnd)="
+                                                item.addCategory(
+                                                    $event,
+                                                    itemForm
+                                                )
+                                            "
+                                            required
+                                        />
+                                    </mat-chip-list>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.media"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Media</mat-label>
+
+                                    <mat-chip-list
+                                        #mediaList
+                                        name="media"
+                                        formControlName="media"
+                                    >
+                                        <mat-chip
+                                            *ngFor="let m of item.media"
+                                            [removable]="true"
+                                            (removed)="item.removeMedia(m)"
+                                        >
+                                            {{ m }}
+                                            <mat-icon matChipRemove
+                                                >cancel</mat-icon
+                                            >
+                                        </mat-chip>
+
+                                        <input
+                                            [matChipInputFor]="mediaList"
+                                            [matChipInputAddOnBlur]="true"
+                                            (matChipInputTokenEnd)="
+                                                item.addMedia($event)
+                                            "
+                                        />
+                                    </mat-chip-list>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.project && pageType === 'new'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Project</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Project"
+                                        name="project"
+                                        formControlName="project"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="
+                                        modelName === 'Product' &&
+                                        pageType === 'edit'
+                                    "
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Presentation</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Presentation"
+                                        name="Presentation"
+                                        formControlName="project"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.territories"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Territories</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Territories"
+                                        name="territories"
+                                        formControlName="territories"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.creator && pageType === 'new'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Creator</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Creator"
+                                        name="creator"
+                                        formControlName="creator"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.link"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Link</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Link"
+                                        name="link"
+                                        formControlName="link"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="model.active"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>active</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="active"
+                                        name="active"
+                                        formControlName="active"
+                                        required
+                                    />
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab
+                            *ngIf="modelName === 'Company'"
+                            label="Company Info"
+                        >
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Website</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Website"
+                                        name="website"
+                                        formControlName="website"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Address</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Address"
+                                        name="address"
+                                        formControlName="address"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="pageType === 'new'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Postal Code</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Postal Code"
+                                        name="postalCode"
+                                        formControlName="postalCode"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    *ngIf="pageType === 'new'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>City</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="City"
+                                        name="city"
+                                        formControlName="city"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Sector</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Sector"
+                                        name="sector"
+                                        formControlName="sector"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Staff Count</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Staff Count"
+                                        name="staffcount"
+                                        formControlName="staffcount"
+                                        required
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Activity</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Activity"
+                                        name="activity"
+                                        formControlName="activity"
+                                        required
+                                    />
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab
+                            *ngIf="modelName === 'Company'"
+                            label="Technical Info"
+                        >
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Subscription Period</mat-label>
+                                    <!-- <input
+                                        matInput
+                                        placeholder="Subscription Period"
+                                        name="subPeriod"
+                                        formControlName="subPeriod"
+                                        required
+                                    /> -->
+                                    <mat-select formControlName="subPeriod" required>
+                                        <mat-option value="12" selected>
+                                            12 Months
+                                        </mat-option>
+                                        <mat-option value="24">
+                                            24 Months
+                                        </mat-option>
+                                        <mat-option value="36">
+                                            36 Months
+                                        </mat-option>
+                                        <mat-option value="60">
+                                            60 Months
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Database Size</mat-label>
+                                    <!-- <input
+                                        matInput
+                                        placeholder="Database Size"
+                                        name="databaseSize"
+                                        formControlName="databaseSize"
+                                        required
+                                    /> -->
+                                    <mat-select formControlName="databaseSize" required>
+                                        <mat-option value=20 selected>
+                                            10 GB Space - 20 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=50>
+                                            50 GB Space - 50 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=120>
+                                            100 GB Space - 120 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="210">
+                                            250 GB Space - 210 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=470>
+                                            500 GB Space - 470 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=800>
+                                            1 TB Space - 800 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=1600>
+                                            2 TB Space - 1600 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=3000>
+                                            5 TB Space - 3000 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value=5000>
+                                            Unlimited Space - 5000 ᴰᵀ
+                                        </mat-option>
+    
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Support Type</mat-label>
+                                    <!-- <input
+                                        matInput
+                                        placeholder="Support Type"
+                                        name="supportType"
+                                        formControlName="supportType"
+                                        required
+                                    /> -->
+                                    <mat-select formControlName="supportType" required>
+                                        <mat-option value="0">
+                                            No support
+                                        </mat-option>
+                                        <mat-option value="support1" selected>
+                                            1 day support / month - 20 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support5">
+                                            5 day support / month - 65 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support10">
+                                            10 day support / month - 150 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="support">
+                                            Unlimited hour of
+                              support - 180 ᴰᵀ
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Sla Type</mat-label>
+                                    <!-- <input
+                                        matInput
+                                        placeholder="Sla Type"
+                                        name="slaType"
+                                        formControlName="slaType"
+                                        required
+                                    /> -->
+                                    <mat-select formControlName="slaType" required>
+                                        <mat-option value="15" selected>
+                                            <strong>Three SLA Event/Metric Types</strong>(First Response | Update | Solved) 15 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="30">
+                                            <strong>Additional SLA Event/Metric Types</strong>(Assignment | Workaround |
+                                            Custom) 30 ᴰᵀ
+                                        </mat-option>
+                                        <mat-option value="40">
+                                            <strong>Multiple SLA Event Types & Advanced SLA Workflow
+                                                Models</strong> 40 ᴰᵀ
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="Item Images">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <div
+                                    fxLayout="row wrap"
+                                    fxLayoutAlign="start start"
+                                >
+                                    <div
+                                        *ngIf="item.images.length === 0"
+                                        class="item-image"
+                                        fxlayout="row"
+                                        fxLayoutAlign="center center"
+                                    >
+                                        <img
+                                            class="media"
+                                            [src]="
+                                                'assets/images/ecommerce/product-image-placeholder.png'
+                                            "
+                                        />
+                                    </div>
+
+                                    <div *ngFor="let image of item.images">
+                                        <div
+                                            *ngIf="item.images.length > 0"
+                                            class="item-image"
+                                            fxlayout="row"
+                                            fxLayoutAlign="center center"
+                                        >
+                                            <img
+                                                class="media"
+                                                [src]="image.url"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab
+                            *ngIf="modelName === 'Product'"
+                            label="Pricing"
+                        >
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Tax Excluded Price</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Tax Excluded Price"
+                                        name="priceTaxExcl"
+                                        formControlName="price"
+                                        type="number"
+                                    />
+                                    <span matPrefix>$&nbsp;</span>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Tax Included Price</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Tax Included Price"
+                                        name="priceTaxIncl"
+                                        type="number"
+                                    />
+                                    <span matPrefix>$&nbsp;</span>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Tax Rate</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Tax Rate"
+                                        name="taxRate"
+                                        type="number"
+                                    />
+                                    <span matPrefix>&#37;&nbsp;</span>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    class="w-100-p"
+                                >
+                                    <mat-label>Compared Price</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Compared Price"
+                                        name="comparedPrice"
+                                        type="number"
+                                    />
+                                    <span matPrefix>$&nbsp;</span>
+                                    <mat-hint align="start"
+                                        >Add a compare price to show next to the
+                                        real price
+                                    </mat-hint>
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </form>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
